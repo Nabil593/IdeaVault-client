@@ -1,72 +1,95 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-const LoginPage = () => {
+const SignUpPage = () => {
     const router = useRouter();
-    const searchParams = useSearchParams();
 
-    // Redirect target (Protected route থেকে আসলে সেখানে ফেরত পাঠাবে, নয়তো হোমপেজে)
-    const redirectTo = searchParams.get('redirect') || '/';
-
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [photoUrl, setPhotoUrl] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+    // Password Validation Rules
+    const validatePassword = (pass) => {
+        const minLength = pass.length >= 6;
+        const hasUppercase = /[A-Z]/.test(pass);
+        const hasLowercase = /[a-z]/.test(pass);
+
+        return minLength && hasUppercase && hasLowercase;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            // 📝 এখানে আপনার Auth Provider (Firebase/NextAuth) এর লগইন মেথড কল করবেন
-            // const result = await signInWithEmail(email, password);
+        // Password Validation Behavior Check
+        if (!validatePassword(password)) {
+            // Error Behavior: Toast message error alert
+            alert("Password must be at least 6 characters long and include both uppercase and lowercase letters.");
+            // toast.error("Invalid Password Requirements");
+            return;
+        }
 
-            console.log("Logging in with:", { email, password });
+        try {
+            // 📝 এখানে আপনার রেজিস্ট্রেশন মেথড কল করবেন (e.g., createUserWithEmailAndPassword)
+            console.log("Registering user:", { name, email, photoUrl, password });
 
             // Success Behavior: Redirect to desired route
-            // toast.success("Successfully logged in!");
-            router.push(redirectTo);
+            // toast.success("Registration completed successfully!");
+            router.push('/'); // অথবা আপনার ড্যাশবোর্ড/ডিজায়ার্ড রুট
 
         } catch (error) {
-            // Error Behavior: Show toast message
-            // toast.error(error.message || "Failed to log in. Please check credentials.");
+            // Error Behavior: Toast message
+            // toast.error(error.message || "Registration failed. Try again.");
             console.error(error);
         }
     };
 
-    const handleGoogleLogin = async () => {
+    const handleGoogleSignUp = async () => {
         try {
-            // 📝 এখানে গুগল লগইন মেথড কল করবেন
-            // await signInWithGoogle();
-
-            console.log("Google Login Clicked");
-
-            // Success Behavior
-            // toast.success("Successfully logged in with Google!");
-            router.push(redirectTo);
+            // Google Login functionality
+            console.log("Google Sign Up Clicked");
+            // toast.success("Registered with Google!");
+            router.push('/');
         } catch (error) {
-            // Error Behavior
-            // toast.error(error.message || "Google sign-in failed.");
+            // toast.error(error.message);
             console.error(error);
         }
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-white dark:bg-[#121212] px-4 font-sans transition-colors duration-300">
+        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-white dark:bg-[#121212] px-4 py-8 font-sans transition-colors duration-300">
             <div className="w-full max-w-md bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-xl p-8 transition-all">
 
                 {/* Header Section */}
-                <div className="text-center mb-8">
+                <div className="text-center mb-6">
                     <h2 className="text-xl font-semibold mt-4 text-gray-900 dark:text-gray-100">
-                        Welcome Back
+                        Create Your Account
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Log in to secure and track your creative milestones.
+                        Join us to secure, share, and track your creative milestones.
                     </p>
                 </div>
 
                 {/* Form Section */}
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-4">
+
+                    {/* Name Input */}
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                            Full Name
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="John Doe"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-zinc-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent text-sm transition-all"
+                        />
+                    </div>
 
                     {/* Email Input */}
                     <div>
@@ -83,20 +106,26 @@ const LoginPage = () => {
                         />
                     </div>
 
-                    {/* Password Input */}
+                    {/* Photo URL Input */}
                     <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                                Password
-                            </label>
-                            {/* Forget Password (UI only) */}
-                            <button
-                                type="button"
-                                className="text-xs text-gray-500 hover:text-black dark:hover:text-white transition-colors"
-                            >
-                                <Link href={'/forget'}>Forgot?</Link>
-                            </button>
-                        </div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                            Photo URL
+                        </label>
+                        <input
+                            type="url"
+                            required
+                            value={photoUrl}
+                            onChange={(e) => setPhotoUrl(e.target.value)}
+                            placeholder="https://example.com/photo.jpg"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-zinc-700 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent text-sm transition-all"
+                        />
+                    </div>
+
+                    {/* Password Input with Validation Rules */}
+                    <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2">
+                            Password
+                        </label>
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -123,28 +152,35 @@ const LoginPage = () => {
                                 )}
                             </button>
                         </div>
+
+                        {/* Real-time Dynamic Guidance Check (UI feedback for validation) */}
+                        <div className="mt-2 space-y-1 text-xs text-gray-400">
+                            <p className={password.length >= 6 ? "text-green-600 dark:text-green-400" : ""}>✓ Minimum 6 characters</p>
+                            <p className={/[A-Z]/.test(password) ? "text-green-600 dark:text-green-400" : ""}>✓ Must include uppercase letter</p>
+                            <p className={/[a-z]/.test(password) ? "text-green-600 dark:text-green-400" : ""}>✓ Must include lowercase letter</p>
+                        </div>
                     </div>
 
-                    {/* Login Button */}
+                    {/* Register Button */}
                     <button
                         type="submit"
-                        className="w-full py-3 px-4 mt-2 text-sm font-medium rounded-lg bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-all font-semibold"
+                        className="w-full py-3 px-4 mt-4 text-sm font-medium rounded-lg bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-all font-semibold"
                     >
-                        Sign In
+                        Sign Up
                     </button>
                 </form>
 
                 {/* --- OR Divider --- */}
-                <div className="relative flex py-5 items-center">
+                <div className="relative flex py-4 items-center">
                     <div className="flex-grow border-t border-gray-200 dark:border-zinc-800"></div>
-                    <span className="flex-shrink mx-4 text-xs text-gray-400 uppercase tracking-wider font-medium">Or continue with</span>
+                    <span className="flex-shrink mx-4 text-xs text-gray-400 uppercase tracking-wider font-medium">Or register with</span>
                     <div className="flex-grow border-t border-gray-200 dark:border-zinc-800"></div>
                 </div>
 
                 {/* Google Login Only */}
                 <button
                     type="button"
-                    onClick={handleGoogleLogin}
+                    onClick={handleGoogleSignUp}
                     className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg border border-gray-300 dark:border-zinc-700 bg-transparent hover:bg-gray-50 dark:hover:bg-zinc-800 text-sm font-medium text-gray-700 dark:text-gray-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white"
                 >
                     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,14 +189,13 @@ const LoginPage = () => {
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
                     </svg>
-                    <span>Sign in with Google</span>
+                    <span>Sign up with Google</span>
                 </button>
 
-                {/* Link to Register */}
-                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800 text-center text-sm text-gray-600 dark:text-gray-400">
-                    {"Don't"} have an account?{' '}
-                    <Link href="/register" className="font-medium text-black dark:text-white hover:underline transition-all">
-                        Register here
+                <div className="mt-6 pt-4 border-t border-gray-100 dark:border-zinc-800 text-center text-sm text-gray-600 dark:text-gray-400">
+                    Already have an account?{' '}
+                    <Link href="/login" className="font-medium text-black dark:text-white hover:underline transition-all">
+                        Sign In here
                     </Link>
                 </div>
             </div>
@@ -168,4 +203,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default SignUpPage;
