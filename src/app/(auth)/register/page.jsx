@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
 
 const SignUpPage = () => {
     const router = useRouter();
@@ -26,36 +28,40 @@ const SignUpPage = () => {
 
         // Password Validation Behavior Check
         if (!validatePassword(password)) {
-            // Error Behavior: Toast message error alert
-            alert("Password must be at least 6 characters long and include both uppercase and lowercase letters.");
-            // toast.error("Invalid Password Requirements");
+            toast.error("Password must be at least 6 characters long and include both uppercase and lowercase letters.");
             return;
         }
 
         try {
-            // 📝 এখানে আপনার রেজিস্ট্রেশন মেথড কল করবেন (e.g., createUserWithEmailAndPassword)
-            console.log("Registering user:", { name, email, photoUrl, password });
+            const { data, error } = await authClient.signUp.email({
+                name: name, // required
+                email: email, // required
+                password: password, // required
+                image: photoUrl,
+                // callbackURL: "https://example.com/callback",
+            });
 
-            // Success Behavior: Redirect to desired route
-            // toast.success("Registration completed successfully!");
-            router.push('/'); // অথবা আপনার ড্যাশবোর্ড/ডিজায়ার্ড রুট
+            // console.log(data);
+            toast.success("Registration completed successfully!");
+            router.push('/login');
 
         } catch (error) {
-            // Error Behavior: Toast message
-            // toast.error(error.message || "Registration failed. Try again.");
+            toast.error(error.message || "Registration failed. Try again.");
             console.error(error);
         }
     };
 
     const handleGoogleSignUp = async () => {
         try {
-            // Google Login functionality
-            console.log("Google Sign Up Clicked");
-            // toast.success("Registered with Google!");
+            const { data, error } = await authClient.signIn.social({
+                provider: "google",
+            });
+            console.log("Google Sign Up Clicked", data);
+            toast.success("Registered with Google!");
             router.push('/');
         } catch (error) {
-            // toast.error(error.message);
-            console.error(error);
+            toast.error(error.message || "Failed to register with Google.");
+            // console.error(error);
         }
     };
 

@@ -2,16 +2,51 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import { Avatar } from '@heroui/react';
+import { toast } from 'sonner';
 
 const Navbar = () => {
+
+    const router = useRouter();
+
+    const {
+        data: session,
+        isPending, //loading state
+        error, //error object
+        refetch //refetch the session
+    } = authClient.useSession();
+
+    console.log(session);
+
+    const user = session?.user;
+
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    const [user, setUser] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    //Logout function
+    const handleLogout = async () => {
+        try {
+            await authClient.signOut({
+                fetchOptions: {
+                    onSuccess: () => {
+                        router.push("/login");
+                        setIsMobileMenuOpen(false);
+                    },
+                },
+            });
+            toast.success("Logged out successfully!");
+        } catch (error) {
+            console.error("Error during logout:", error);
+            toast.error("Failed to log out.");
+        }
+    }
 
     // Theme toggle icon/text helper function
     const renderThemeToggle = (isMobile = false) => {
@@ -109,8 +144,19 @@ const Navbar = () => {
 
                                 {/* Profile Dropdown Container (Hover) */}
                                 <div className="relative group py-2">
-                                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white dark:bg-white dark:text-black font-semibold text-sm border border-transparent hover:border-gray-400 transition-all focus:outline-none">
-                                        N
+                                    <button className="flex items-center justify-center rounded-full border border-transparent group-hover:border-gray-400 transition-all focus:outline-none overflow-hidden">
+                                        <Avatar className="w-10 h-10">
+                                            <Avatar.Image
+                                                alt={user?.name || "John Doe"}
+                                                src={user?.image}
+                                                referrerPolicy="no-referrer"
+                                                className="w-full h-full object-cover rounded-full"
+                                            />
+                                            
+                                            <Avatar.Fallback className="w-10 h-10 flex items-center justify-center bg-black text-white dark:bg-white dark:text-black text-sm font-semibold rounded-full">
+                                                {user?.name ? user.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2) : "JD"}
+                                            </Avatar.Fallback>
+                                        </Avatar>
                                     </button>
 
                                     {/* Dropdown Menu */}
@@ -123,7 +169,7 @@ const Navbar = () => {
 
                                         <div className="py-1 border-t border-gray-100 dark:border-zinc-800">
                                             <button
-                                                onClick={() => setUser(false)}
+                                                onClick={handleLogout}
                                                 className="w-full text-left block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium transition-colors"
                                             >
                                                 Log out
@@ -173,7 +219,7 @@ const Navbar = () => {
                     {user ? (
                         <div className="grid grid-cols-2 gap-2 pt-2">
                             <Link href="/add-idea" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black dark:bg-white dark:text-black text-center font-semibold">+ Add Idea</Link>
-                            <button onClick={() => setUser(false)} className="w-full text-center block px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600">Log out</button>
+                            <button onClick={handleLogout} className="w-full text-center block px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600">Log out</button>
                         </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-2 pt-2">

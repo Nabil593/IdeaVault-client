@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
 
 const LoginPage = () => {
     const router = useRouter();
@@ -18,35 +20,37 @@ const LoginPage = () => {
         e.preventDefault();
 
         try {
-            // 📝 এখানে আপনার Auth Provider (Firebase/NextAuth) এর লগইন মেথড কল করবেন
-            // const result = await signInWithEmail(email, password);
+            const { data, error } = await authClient.signIn.email({
+                email: email, // required
+                password: password, // required
+                rememberMe: true,
+                // callbackURL: "https://example.com/callback",
+            });
 
-            console.log("Logging in with:", { email, password });
+            console.log("Success:", data);
 
             // Success Behavior: Redirect to desired route
-            // toast.success("Successfully logged in!");
+            toast.success("Successfully Logged In!");
             router.push(redirectTo);
 
         } catch (error) {
             // Error Behavior: Show toast message
-            // toast.error(error.message || "Failed to log in. Please check credentials.");
+            toast.error(error.message || "Failed to log in. Please check credentials.");
             console.error(error);
         }
     };
 
     const handleGoogleLogin = async () => {
         try {
-            // 📝 এখানে গুগল লগইন মেথড কল করবেন
-            // await signInWithGoogle();
-
-            console.log("Google Login Clicked");
-
-            // Success Behavior
-            // toast.success("Successfully logged in with Google!");
-            router.push(redirectTo);
+            // Google Login functionality
+            const { data, error } = await authClient.signIn.social({
+                provider: "google",
+            });
+            // console.log("Google Login Clicked", data);
+            toast.success("Logged in with Google!");
+            router.push('/');
         } catch (error) {
-            // Error Behavior
-            // toast.error(error.message || "Google sign-in failed.");
+            toast.error(error.message || "Failed to log in with Google.");
             console.error(error);
         }
     };

@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./Components/shared/Navbar";
 import Footer from "./Components/shared/Footer";
 import { ThemeProvider } from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           <main className="flex-1">{children}</main>
           <Footer />
         </ThemeProvider>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );
