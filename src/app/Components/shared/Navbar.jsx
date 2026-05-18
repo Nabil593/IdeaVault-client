@@ -1,89 +1,130 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 
 const Navbar = () => {
-
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
     const [user, setUser] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Theme toggle icon/text helper function
+    const renderThemeToggle = (isMobile = false) => {
+        if (!mounted) return null;
+        const isDark = theme === 'dark';
+
+        if (isMobile) {
+            return (
+                <button
+                    onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                    className="w-full flex items-center justify-between px-3 py-2 rounded-md font-medium hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-200 text-left transition-colors"
+                >
+                    <span>Theme Mode</span>
+                    <span className="text-xs bg-gray-100 dark:bg-zinc-700 px-2 py-0.5 rounded text-gray-500 dark:text-gray-300">
+                        {isDark ? 'Dark' : 'Light'}
+                    </span>
+                </button>
+            );
+        }
+
+        return (
+            <button
+                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-200 transition-colors focus:outline-none"
+                title="Toggle Theme"
+            >
+                {isDark ? (
+                    // Sun Icon for Light Mode
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707.707m2.828 5.657a4 4 0 118 0 4 4 0 01-8 0z" />
+                    </svg>
+                ) : (
+                    // Moon Icon for Dark Mode
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                )}
+            </button>
+        );
+    };
+
     return (
-        <nav className="bg-[#EDEDED] text-black border-b border-gray-200 sticky top-0 z-50 font-sans transition-colors duration-300">
+        <nav className="bg-[#EDEDED] dark:bg-[#121212] text-black dark:text-white border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
 
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <Link href="/" className="text-xl font-bold tracking-tight text-black">
-                            IdeaVault<span className="text-black">.</span>
+                        <Link href="/" className="text-xl font-bold tracking-tight text-black dark:text-white">
+                            IdeaVault<span className="text-black dark:text-white">.</span>
                         </Link>
                     </div>
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                        <Link href="/" className="hover:text-gray-600 transition-colors">Home</Link>
-                        <Link href="/ideas" className="hover:text-gray-600 transition-colors">Ideas</Link>
+                        <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</Link>
+                        <Link href="/ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</Link>
 
                         {user && (
                             <>
-                                <Link href="/my-ideas" className="hover:text-gray-600 transition-colors">My Ideas</Link>
-                                <Link href="/interactions" className="hover:text-gray-600 transition-colors">My Interactions</Link>
+                                <Link href="/my-ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Ideas</Link>
+                                <Link href="/interactions" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Interactions</Link>
                             </>
                         )}
 
                         {/* Divider Line */}
-                        <span className="text-gray-300 h-4 w-[1.5px] bg-gray-400 block" aria-hidden="true"></span>
+                        <span className="text-gray-300 dark:text-gray-600 h-4 w-[1.5px] bg-gray-400 block" aria-hidden="true"></span>
+
+                        {/* Theme Toggle Button (Always visible on desktop) */}
+                        {renderThemeToggle()}
 
                         {/* Action Buttons / Profile Section */}
                         {!user ? (
                             <div className="flex items-center space-x-3">
-                                <Link href="/login" className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-800 transition-all">
+                                <Link href="/login" className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all">
                                     Login
                                 </Link>
-                                <Link href="/register" className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-800 transition-all">
+                                <Link href="/register" className="px-5 py-2 text-sm font-medium rounded-md bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all">
                                     Register
                                 </Link>
                             </div>
                         ) : (
                             <div className="flex items-center space-x-4">
+
+                                {/* Divider Line */}
+                                <span className="text-gray-300 dark:text-gray-600 h-4 w-[1.5px] bg-gray-400 block" aria-hidden="true"></span>
+
                                 {/* Add Idea Button */}
-                                <Link href="/add-idea" className="px-4 py-2 text-sm font-medium rounded-md bg-black text-white hover:bg-gray-800 transition-all flex items-center gap-1">
+                                <Link href="/add-idea" className="px-4 py-2 text-sm font-medium rounded-md bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-all flex items-center gap-1">
                                     <span>+</span> Add Idea
                                 </Link>
 
                                 {/* Divider Line */}
-                                <span className="text-gray-300 h-4 w-[1.5px] bg-gray-400 block" aria-hidden="true"></span>
+                                <span className="text-gray-300 dark:text-gray-600 h-4 w-[1.5px] bg-gray-400 block" aria-hidden="true"></span>
 
-                                {/* Profile Dropdown Container (Triggered via Hover) */}
+                                {/* Profile Dropdown Container (Hover) */}
                                 <div className="relative group py-2">
-
-                                    {/* profile image */}
-                                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white font-semibold text-sm border border-transparent hover:border-gray-400 transition-all focus:outline-none">
+                                    <button className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white dark:bg-white dark:text-black font-semibold text-sm border border-transparent hover:border-gray-400 transition-all focus:outline-none">
                                         N
                                     </button>
 
                                     {/* Dropdown Menu */}
-                                    <div className="absolute right-0 mt-3 w-52 bg-white text-gray-800 rounded-lg shadow-xl border border-gray-100 opacity-0 invisible scale-95 group-hover:opacity-100 group-hover:invisible-none group-hover:visible group-hover:scale-100 transition-all duration-200 origin-top-right z-50">
-
+                                    <div className="absolute right-0 mt-3 w-52 bg-white dark:bg-zinc-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-xl border border-gray-100 dark:border-zinc-800 opacity-0 invisible scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100 transition-all duration-200 origin-top-right z-50">
                                         <div className="py-1">
-                                            <Link href="/profile" className="block px-4 py-2.5 text-sm hover:bg-gray-50 text-gray-700 transition-colors">
+                                            <Link href="/profile" className="block px-4 py-2.5 text-sm hover:bg-gray-50 dark:hover:bg-zinc-800 text-gray-700 dark:text-gray-200 transition-colors">
                                                 My Profile
                                             </Link>
-
-                                            {/* Theme Toggle Button Placeholder */}
-                                            <button
-                                                onClick={() => console.log('Toggle theme')}
-                                                className="w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-gray-50 text-gray-700 text-left transition-colors"
-                                            >
-                                                <span>Theme Mode</span>
-                                                <span className="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-500">Light</span>
-                                            </button>
                                         </div>
 
-                                        <div className="py-1 border-t border-gray-100">
+                                        <div className="py-1 border-t border-gray-100 dark:border-zinc-800">
                                             <button
                                                 onClick={() => setUser(false)}
-                                                className="w-full text-left block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-medium transition-colors"
+                                                className="w-full text-left block px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 font-medium transition-colors"
                                             >
                                                 Log out
                                             </button>
@@ -98,7 +139,7 @@ const Navbar = () => {
                     <div className="md:hidden flex items-center">
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-black p-2 rounded-md hover:bg-gray-200 focus:outline-none"
+                            className="text-black dark:text-white p-2 rounded-md hover:bg-gray-200 dark:hover:bg-zinc-800 focus:outline-none"
                         >
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 {isMobileMenuOpen ? (
@@ -114,33 +155,30 @@ const Navbar = () => {
 
             {/* Mobile Navigation Drawer */}
             {isMobileMenuOpen && (
-                <div className="md:hidden bg-[#EDEDED] border-t border-gray-200 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-                    <Link href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-200">Home</Link>
-                    <Link href="/ideas" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-200">Ideas</Link>
+                <div className="md:hidden bg-[#EDEDED] dark:bg-[#121212] border-t border-gray-200 dark:border-gray-800 px-4 pt-2 pb-4 space-y-2 shadow-inner">
+                    <Link href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-800">Home</Link>
+                    <Link href="/ideas" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-800">Ideas</Link>
+
+                    {user && (
+                        <>
+                            <Link href="/my-ideas" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-800">My Ideas</Link>
+                            <Link href="/interactions" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-zinc-800">My Interactions</Link>
+                            <Link href="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800">My Profile</Link>
+                        </>
+                    )}
+
+                    {/* Theme Toggle Button (Always visible on Mobile Drawer) */}
+                    {renderThemeToggle(true)}
 
                     {user ? (
-                        <>
-                            <Link href="/my-ideas" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-200">My Ideas</Link>
-                            <Link href="/interactions" className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-200">My Interactions</Link>
-                            <Link href="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-200">My Profile</Link>
-
-                            <button
-                                onClick={() => console.log('Toggle theme')}
-                                className="w-full flex items-center justify-between px-3 py-2 rounded-md font-medium hover:bg-gray-50 text-gray-700 text-left transition-colors"
-                            >
-                                <span>Theme Mode</span>
-                                <span className="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-500">Light</span>
-                            </button>
-
-                            <div className="grid grid-cols-2 gap-2 pt-2">
-                                <Link href="/add-idea" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black hover:bg-gray-800 text-center font-semibold">+ Add Idea</Link>
-                                <button onClick={() => setUser(false)} className="w-full text-center block px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600">Log out</button>
-                            </div>
-                        </>
+                        <div className="grid grid-cols-2 gap-2 pt-2">
+                            <Link href="/add-idea" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black dark:bg-white dark:text-black text-center font-semibold">+ Add Idea</Link>
+                            <button onClick={() => setUser(false)} className="w-full text-center block px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600">Log out</button>
+                        </div>
                     ) : (
                         <div className="grid grid-cols-2 gap-2 pt-2">
-                            <Link href="/login" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black hover:bg-gray-800 text-center">Login</Link>
-                            <Link href="/register" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black hover:bg-gray-800 text-center">Register</Link>
+                            <Link href="/login" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black dark:bg-white dark:text-black text-center">Login</Link>
+                            <Link href="/register" className="block px-3 py-2 rounded-md text-base font-medium text-white bg-black dark:bg-white dark:text-black text-center">Register</Link>
                         </div>
                     )}
                 </div>
