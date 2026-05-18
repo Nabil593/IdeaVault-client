@@ -27,31 +27,36 @@ const LoginPage = () => {
                 // callbackURL: "https://example.com/callback",
             });
 
-            console.log("Success:", data);
-
-            // Success Behavior: Redirect to desired route
-            toast.success("Successfully Logged In!");
-            router.push(redirectTo);
+            if (!error) {
+                toast.success("Successfully Logged In!");
+                router.push(redirectTo);
+                // console.log(data);
+            } else {
+                toast.error(error.message || "Failed to log in. Please check credentials.");
+            }
 
         } catch (error) {
-            // Error Behavior: Show toast message
-            toast.error(error.message || "Failed to log in. Please check credentials.");
-            console.error(error);
+            toast.error(error.message || "Something went wrong. Please try again.");
+            // console.error(error);
         }
     };
 
     const handleGoogleLogin = async () => {
         try {
-            // Google Login functionality
             const { data, error } = await authClient.signIn.social({
                 provider: "google",
             });
-            // console.log("Google Login Clicked", data);
-            toast.success("Logged in with Google!");
-            router.push('/');
+
+            if (!error) {
+                toast.success("Logged in with Google!");
+                router.push('/');
+                // console.log("Google Login Clicked", data);
+            } else {
+                toast.error(error.message || "Failed to log in with Google.");
+            }
         } catch (error) {
-            toast.error(error.message || "Failed to log in with Google.");
-            console.error(error);
+            toast.error(error.message || "Something went wrong. Please try again.");
+            // console.error(error);
         }
     };
 

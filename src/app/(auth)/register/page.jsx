@@ -41,13 +41,18 @@ const SignUpPage = () => {
                 // callbackURL: "https://example.com/callback",
             });
 
-            // console.log(data);
-            toast.success("Registration completed successfully!");
-            router.push('/login');
+            if (!error) {
+                toast.success("Registration completed successfully!");
+                router.push('/login');
+                // console.log(data)
+            } else {
+                toast.error(error.message || "Registration failed. Try again.");
+                // console.error(error);
+            }
 
         } catch (error) {
-            toast.error(error.message || "Registration failed. Try again.");
-            console.error(error);
+            toast.error(error.message || "Something went wrong. Please try again.");
+            // console.error(error);
         }
     };
 
@@ -56,11 +61,17 @@ const SignUpPage = () => {
             const { data, error } = await authClient.signIn.social({
                 provider: "google",
             });
-            console.log("Google Sign Up Clicked", data);
-            toast.success("Registered with Google!");
-            router.push('/');
+
+            if (!error) {
+                toast.success("Registered with Google!");
+                router.push('/');
+                // console.log("Google Sign Up Clicked", data);
+            } else {
+                toast.error(error.message || "Failed to register with Google.");
+                // console.log(error)
+            }
         } catch (error) {
-            toast.error(error.message || "Failed to register with Google.");
+            toast.error(error.message || "Something went wrong. Please try again.");
             // console.error(error);
         }
     };
