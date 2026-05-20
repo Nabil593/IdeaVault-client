@@ -3,10 +3,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useSession } from "@/lib/auth-client";
 
 const AddIdeaPage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
+    const { data: session } = useSession();
+    const currentUser = session?.user;
 
     const [formData, setFormData] = useState({
         title: '',
@@ -30,11 +34,24 @@ const AddIdeaPage = () => {
         e.preventDefault();
         setLoading(true);
 
+        // 🛡️ সেফটি চেক: ইউজার লগইন না থাকলে এখানেই সাবমিশন আটকে দেবে
+        if (!currentUser?.email) {
+            toast.error('You must be logged in to deploy a concept!');
+            setLoading(false);
+            return;
+        }
+
+        // 🎯 পেলোড তৈরি: ফর্ম ডাটার সাথে ইউজারের ইমেইল মার্জ করা হলো
+        const ideaPayload = {
+            ...formData,
+            userEmail: currentUser.email
+        };
+
         try {
             const response = await fetch('http://localhost:5000/ideas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(ideaPayload)
             });
 
             if (response.ok) {

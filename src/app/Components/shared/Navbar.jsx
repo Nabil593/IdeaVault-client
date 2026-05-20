@@ -18,7 +18,7 @@ const Navbar = () => {
         refetch //refetch the session
     } = authClient.useSession();
 
-    console.log(session);
+    // console.log(session);
 
     const user = session?.user;
 
