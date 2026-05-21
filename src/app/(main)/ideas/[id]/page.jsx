@@ -12,13 +12,11 @@ const IdeaDetailsPage = () => {
     const { id } = useParams();
     const router = useRouter();
 
-    // States
     const [idea, setIdea] = useState(null);
     const [loading, setLoading] = useState(true);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 
-    // Editing States
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingText, setEditingText] = useState('');
 
@@ -33,7 +31,7 @@ const IdeaDetailsPage = () => {
 
 
 
-    // 🔄 ১. ব্যাকএন্ড থেকে আইডিয়া ও কমেন্ট ডাটা লোড করা
+    // 1. Loading idea & comment data from backend
     useEffect(() => {
         const fetchIdeaDetails = async () => {
             try {
@@ -57,12 +55,11 @@ const IdeaDetailsPage = () => {
         if (id) fetchIdeaDetails();
     }, [id]);
 
-    // ➕ ২. নতুন কমেন্ট অ্যাড করা (সরাসরি ডাটাবেজে সেভ হবে)
+    // 2. Add new comment
     const handleAddComment = async (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
 
-        // ব্যাকএন্ডে পাঠানোর জন্য কমেন্ট অবজেক্ট তৈরি
         const commentPayload = {
             userName: currentUser.name,
             userEmail: currentUser.email,
@@ -70,7 +67,6 @@ const IdeaDetailsPage = () => {
         };
 
         try {
-            // 🌟 আসল ব্যাকএন্ড এপিআই কল
             const res = await fetch(`http://localhost:5000/ideas/${id}/comments`, {
                 method: 'POST',
                 headers: {
@@ -82,9 +78,8 @@ const IdeaDetailsPage = () => {
             const data = await res.json();
 
             if (data.success) {
-                // ব্যাকএন্ড থেকে আসা রিয়েল MongoDB ObjectId সহ স্টেট আপডেট
                 setComments([...comments, data.comment]);
-                setNewComment(''); // ইনপুট বক্স খালি করা
+                setNewComment('');
                 toast.success("Comment permanently saved to database!");
             } else {
                 toast.error(data.message || "Failed to save comment.");
@@ -95,13 +90,13 @@ const IdeaDetailsPage = () => {
         }
     };
 
-    // ✏️ ৩. কমেন্ট এডিট মোড চালু করা
+    // 3. Comment edit
     const startEdit = (comment) => {
         setEditingCommentId(comment._id);
         setEditingText(comment.text);
     };
 
-    // 💾 ৪. এডিটেড কমেন্ট ডাটাবেজে সেভ করা (Update)
+    // 4. Save edited comments
     const handleSaveEdit = async (commentId) => {
         if (!editingText.trim()) return;
 
@@ -129,7 +124,7 @@ const IdeaDetailsPage = () => {
         }
     };
 
-    // 🗑️ ৫. কমেন্ট ডাটাবেজ থেকে ডিলিট করা (Delete)
+    // 5. Delete comments
     const handleDeleteComment = async (commentId) => {
         try {
             const res = await fetch(`http://localhost:5000/ideas/${id}/comments/${commentId}`, {
@@ -173,7 +168,7 @@ const IdeaDetailsPage = () => {
         <div className="min-h-screen bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 py-12 font-sans transition-colors duration-300">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                {/* ব্যাক লিঙ্ক */}
+                {/* Back link */}
                 <Link
                     href="/ideas"
                     className="inline-flex items-center gap-2 text-xs font-bold text-gray-400 dark:text-zinc-500 hover:text-gray-900 dark:hover:text-white transition-colors group"
@@ -182,10 +177,9 @@ const IdeaDetailsPage = () => {
                     Back to Vault
                 </Link>
 
-                {/* মেইন ইনফরমেশন কার্ড */}
+                {/* Main card */}
                 <div className="border border-gray-200 dark:border-zinc-800 rounded-md p-6 sm:p-10 space-y-8 bg-white dark:bg-zinc-900/40 shadow-sm">
 
-                    {/* 🌟 এখানে ইমেজটি যুক্ত করুন */}
                     {idea.imageUrl && (
                         <div className="relative h-80 w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden rounded-md border-b border-gray-100 dark:border-zinc-800/50 ">
                             <Image
@@ -194,12 +188,11 @@ const IdeaDetailsPage = () => {
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                                priority={false} // 👈 এর মানে হলো স্ক্রিনে স্ক্রোল করে যখন কার্ড সামনে আসবে, তখনই শুধু ইমেজ লোড হবে (Lazy Loading), ফলে ওয়েবসাইট একদম রকেটের মতো ফাস্ট থাকবে!
+                                priority={false}
                             />
                         </div>
                     )}
 
-                    {/* ক্যাটাগরি ও বাজেট ট্যাগ */}
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 border border-gray-200/50 dark:border-zinc-700/50">
                             <Tag className="w-3 h-3" />
@@ -213,7 +206,6 @@ const IdeaDetailsPage = () => {
                         )}
                     </div>
 
-                    {/* টাইটেল এবং শর্ট ডেসক্রিপশন */}
                     <div className="space-y-3">
                         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                             {idea.title}
@@ -223,7 +215,6 @@ const IdeaDetailsPage = () => {
                         </p>
                     </div>
 
-                    {/* মেটা ইনফো গ্রিড */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-b border-gray-100 dark:border-zinc-800/60 py-6">
                         <div className="flex items-center gap-3">
                             <Users className="w-4 h-4 text-gray-400 dark:text-zinc-500 flex-shrink-0" />
@@ -242,7 +233,6 @@ const IdeaDetailsPage = () => {
                         </div>
                     </div>
 
-                    {/* ফুল ডেসক্রিপশন / স্ট্র্যাটেজি */}
                     <div className="space-y-4">
                         <h3 className="text-md font-bold tracking-tight text-gray-900 dark:text-white">
                             Detailed Overview & Execution Plan
@@ -254,14 +244,13 @@ const IdeaDetailsPage = () => {
 
                 </div>
 
-                {/* 💬 INTERACTION SYSTEM: COMMENT SECTION */}
+                {/* Comment Section */}
                 <div className="space-y-6 pt-4">
                     <div className="flex items-center gap-2 border-b border-gray-100 dark:border-zinc-800 pb-3">
                         <MessageSquare className="w-4 h-4 text-gray-400" />
                         <h2 className="text-lg font-bold tracking-tight">Discussion ({comments.length})</h2>
                     </div>
 
-                    {/* ১. নতুন কমেন্ট যুক্ত করার ফর্ম */}
                     <form onSubmit={handleAddComment} className="space-y-3">
                         <textarea
                             value={newComment}
@@ -281,7 +270,7 @@ const IdeaDetailsPage = () => {
                         </div>
                     </form>
 
-                    {/* ২. কমেন্ট লিস্ট রেণ্ডারিং */}
+
                     <div className="space-y-4 mt-6">
                         {comments.length === 0 ? (
                             <p className="text-xs text-gray-400 dark:text-zinc-600 text-center py-6">No discussions yet. Be the first to analyze this concept.</p>
@@ -295,7 +284,7 @@ const IdeaDetailsPage = () => {
                                         key={comment._id}
                                         className="p-4 rounded-md border border-gray-100 dark:border-zinc-800/60 bg-zinc-50/30 dark:bg-zinc-900/20 space-y-2 relative group"
                                     >
-                                        {/* কমেন্টার হেডার */}
+
                                         <div className="flex items-center justify-between gap-4">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs font-bold text-gray-900 dark:text-white">
@@ -311,7 +300,7 @@ const IdeaDetailsPage = () => {
                                                 </span>
                                             </div>
 
-                                            {/* নিজের কমেন্ট হলে অ্যাকশন বাটন দেখাবে (Edit/Delete) */}
+                                            {/* Show Edit & delet button */}
                                             {isOwnComment && !isEditing && (
                                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button
@@ -332,7 +321,6 @@ const IdeaDetailsPage = () => {
                                             )}
                                         </div>
 
-                                        {/* কমেন্ট টেক্সট / এডিট ইনপুট ফিল্ড */}
                                         {isEditing ? (
                                             <div className="space-y-2 pt-1">
                                                 <input
