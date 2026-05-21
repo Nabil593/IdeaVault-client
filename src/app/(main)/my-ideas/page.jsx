@@ -11,20 +11,17 @@ const MyIdeasPage = () => {
     const { data: session, isPending } = authClient.useSession();
     const currentUser = session?.user;
 
-    // States
     const [ideas, setIdeas] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Update Modal States
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [selectedIdea, setSelectedIdea] = useState(null);
     const [updateForm, setUpdateForm] = useState({ title: '', shortDesc: '', category: '', budget: '', targetAudience: '', description: '' });
 
-    // Delete Modal States
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [ideaIdToDelete, setIdeaIdToDelete] = useState(null);
 
-    // 🔄 ১. শুধুমাত্র লগইনড ইউজারের আইডিয়াগুলো ব্যাকএন্ড থেকে আনা
+    // 1. Only logged-in user ideas are fetched from backend
     useEffect(() => {
         const fetchMyIdeas = async () => {
             if (!currentUser?.email) return;
@@ -43,7 +40,6 @@ const MyIdeasPage = () => {
             }
         };
 
-        // লুপ আটকানোর জন্য কন্ডিশনাল চেকিং 
         if (!isPending) {
             if (currentUser?.email) {
                 fetchMyIdeas();
@@ -51,10 +47,9 @@ const MyIdeasPage = () => {
                 router.push('/');
             }
         }
-        // 💡 dependency শুধু কারেন্ট ইউজারের ইমেইল এবং ইজপেন্ডিং রাখো, যেন ডেটা একবার আসাই যথেষ্ট হয়
     }, [currentUser?.email, isPending]);
 
-    // ✏️ ২. আপডেট মডাল ওপেন ও ডাটা প্রি-ফিল করা
+    // 2.Update modal
     const openUpdateModal = (idea) => {
         setSelectedIdea(idea);
         setUpdateForm({
@@ -68,7 +63,7 @@ const MyIdeasPage = () => {
         setIsUpdateOpen(true);
     };
 
-    // 💾 ৩. ব্যাকএন্ডে আপডেট সাবমিট করা (PATCH)
+    // 3. Submitting updates to the backend
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -91,13 +86,13 @@ const MyIdeasPage = () => {
         }
     };
 
-    // 🗑️ ৪. ডিলিট কনফার্মেশন মডাল ওপেন করা
+    // 4. Delet Modal
     const openDeleteModal = (id) => {
         setIdeaIdToDelete(id);
         setIsDeleteOpen(true);
     };
 
-    // 🔥 ৫. ব্যাকএন্ড থেকে স্থায়ীভাবে ডিলিট করা (DELETE)
+    // 5. Final Delete 
     const handleDeleteConfirm = async () => {
         try {
             const res = await fetch(`http://localhost:5000/ideas/${ideaIdToDelete}`, {
@@ -117,7 +112,6 @@ const MyIdeasPage = () => {
         }
     };
 
-    // লোডিং স্ক্রিন
     if (isPending || loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -130,16 +124,15 @@ const MyIdeasPage = () => {
         <div className="min-h-screen bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 py-12 font-sans transition-colors duration-300">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                {/* হেডার সেকশন */}
+                {/* Header Section */}
                 <div className="border-b border-gray-100 dark:border-zinc-800 pb-5">
                     <h1 className="text-2xl font-extrabold tracking-tight">My Personal Vault</h1>
                     <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Manage and optimize your curated full-stack system architectures.</p>
                 </div>
 
-                {/* আইডিয়া লিস্ট গ্রিড */}
                 {ideas.length === 0 ? (
                     <div className="text-center py-16 border border-dashed border-gray-200 dark:border-zinc-800 rounded-md">
-                        <p className="text-sm text-gray-400 mb-2">You haven't safely deployed any ideas yet.</p>
+                        <p className="text-sm text-gray-400 mb-2">You {"haven't"} safely deployed any ideas yet.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -151,7 +144,6 @@ const MyIdeasPage = () => {
                                             <Tag className="w-2.5 h-2.5" /> {idea.category}
                                         </span>
 
-                                        {/* কন্ট্রোল বাটন সমূহ */}
                                         <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => openUpdateModal(idea)} className="p-1 text-gray-400 hover:text-zinc-900 dark:hover:text-white transition-colors" title="Edit Architecture">
                                                 <Edit2 className="w-3.5 h-3.5" />
@@ -175,7 +167,7 @@ const MyIdeasPage = () => {
                     </div>
                 )}
 
-                {/*  UPDATE MODAL */}
+                {/*  Update Modal */}
                 {isUpdateOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
                         <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-md max-w-lg w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
@@ -221,7 +213,7 @@ const MyIdeasPage = () => {
                     </div>
                 )}
 
-                {/*  DELETE CONFIRMATION MODAL  */}
+                {/*  Delete Modal  */}
                 {isDeleteOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
                         <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-md max-w-sm w-full p-6 text-center space-y-4 shadow-xl">
