@@ -6,7 +6,7 @@ export const FilterPanel = async ({ searchParams }) => {
     return (
         <form method="GET" action="/ideas" className="bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800/80 rounded-md p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end font-sans">
 
-            {/* ১. সার্চ ইনপুট */}
+            {/* Search Input */}
             <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-zinc-500 flex items-center gap-1">
                     <Search className="w-3 h-3" /> Search Concept
@@ -20,7 +20,7 @@ export const FilterPanel = async ({ searchParams }) => {
                 />
             </div>
 
-            {/* ২. ক্যাটাগরি ফিল্টার */}
+            {/* Category filter */}
             <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-zinc-500 flex items-center gap-1">
                     <SlidersHorizontal className="w-3 h-3" /> Category
@@ -40,7 +40,7 @@ export const FilterPanel = async ({ searchParams }) => {
                 </select>
             </div>
 
-            {/* ৩. স্টার্ট ডেট */}
+            {/* Start date */}
             <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-zinc-500 flex items-center gap-1">
                     <Calendar className="w-3 h-3" /> From Date
@@ -53,7 +53,7 @@ export const FilterPanel = async ({ searchParams }) => {
                 />
             </div>
 
-            {/* ৪. এন্ড ডেট এবং ফিল্টার বাটন */}
+            {/* End Date */}
             <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-1 grid grid-cols-3 gap-2">
                 <div className="col-span-2 flex flex-col gap-1.5">
                     <label className="text-[10px] uppercase tracking-wider text-gray-400 dark:text-zinc-500 flex items-center gap-1">
