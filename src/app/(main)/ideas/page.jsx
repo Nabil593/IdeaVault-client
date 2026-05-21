@@ -4,12 +4,13 @@ import { ArrowUpRight, Users, DollarSign, Search, Calendar, SlidersHorizontal } 
 import Image from 'next/image';
 import { FilterPanel } from '@/app/Components/shared/FilterPanel';
 
-// মেইন সার্ভার কম্পোনেন্ট 
+
+
+
 const AllIdeasPage = async ({ searchParams }) => {
-    // 🌟 সমাধান: মেইন ফাংশনের শুরুতেই searchParams-কে await করে একটা প্লেইন অবজেক্টে নিয়ে আসা হলো
+
     const resolvedParams = await searchParams;
 
-    // এখন আর সরাসরি searchParams ব্যবহার না করে resolvedParams ব্যবহার করা হচ্ছে
     const search = resolvedParams?.search || '';
     const category = resolvedParams?.category || 'All';
     const startDate = resolvedParams?.startDate || '';
@@ -18,14 +19,12 @@ const AllIdeasPage = async ({ searchParams }) => {
     let ideas = [];
 
     try {
-        // ১. URL Query Parameters তৈরি করা
         const params = new URLSearchParams();
         if (search) params.append('search', search);
         if (category && category !== 'All') params.append('category', category);
         if (startDate) params.append('startDate', startDate);
         if (endDate) params.append('endDate', endDate);
 
-        // ২. ফিল্টার কোয়েরি সহ ব্যাকএন্ডে রিকোয়েস্ট পাঠানো
         const res = await fetch(`http://localhost:5000/ideas?${params.toString()}`, {
             cache: 'no-store'
         });
@@ -37,14 +36,13 @@ const AllIdeasPage = async ({ searchParams }) => {
         console.error("Failed to fetch ideas:", error);
     }
 
-    // ফিল্টার একটিভ আছে কিনা তা চেক করার শর্টহ্যান্ড কন্ডিশন (লাইন ১৩৭ এর সমাধান)
     const hasActiveFilters = search || (category && category !== 'All') || startDate || endDate;
 
     return (
         <div className="min-h-screen bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100  py-12 font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                {/* হেডার সেকশন */}
+                {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-gray-100 dark:border-zinc-800 pb-6 gap-4">
                     <div className="space-y-1">
                         <h1 className="text-3xl font-extrabold tracking-tight">
@@ -56,10 +54,10 @@ const AllIdeasPage = async ({ searchParams }) => {
                     </div>
                 </div>
 
-                {/* ৩. ফিল্টার প্যানেল সংযোজন */}
+                {/* FilterPannel Added */}
                 <FilterPanel searchParams={searchParams} />
 
-                {/* রেজাল্ট কাউন্টার বা ক্লিয়ার ফিল্টার অপশন (লাইন ১৩৭ এর ফিক্স) */}
+                {/* Result counter & Reset filter */}
                 {hasActiveFilters && (
                     <div className="flex items-center justify-between text-xs text-gray-400 dark:text-zinc-500">
                         <span>Found {ideas.length} matching concept(s)</span>
@@ -69,13 +67,11 @@ const AllIdeasPage = async ({ searchParams }) => {
                     </div>
                 )}
 
-                {/* যদি কোনো আইডিয়া না থাকে */}
                 {ideas.length === 0 ? (
                     <div className="text-center py-20 border border-dashed border-gray-200 dark:border-zinc-800 rounded-md">
                         <p className="text-gray-400 dark:text-zinc-500 text-sm">No concepts matches your filters.</p>
                     </div>
                 ) : (
-                    /* ৩-কলাম গ্রিড লেআউট */
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {ideas.map((idea) => (
                             <div
@@ -91,8 +87,8 @@ const AllIdeasPage = async ({ searchParams }) => {
                                             fill
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                            loading="lazy" // 👈 স্ক্রিনে যখন স্ক্রোল করে কার্ড আসবে, তখনই শুধু ইমেজ লোড হবে (Lazy Loading)
-                                            unoptimized={false} // 👈 নেক্সট জেএস যাতে এটাকে অটো-অপটিমাইজ করতে পারে
+                                            loading="lazy"
+                                            unoptimized={false}
                                         />
                                     </div>
                                 )}
