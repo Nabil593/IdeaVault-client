@@ -9,12 +9,6 @@ const ForgetPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Requirement অনুযায়ী UI Only Behavior
-        alert("Reset functionality is currently disabled (UI Only).");
-        // toast.info("Password reset link simulation successful.");
-
-        // ইউজারকে আবার লগইন পেজে ফেরত পাঠানো
         router.push('/login');
     };
 
@@ -50,7 +44,6 @@ const ForgetPage = () => {
                         />
                     </div>
 
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         className="w-full py-3 px-4 mt-2 text-sm font-medium rounded-lg bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-all font-semibold"
@@ -59,7 +52,6 @@ const ForgetPage = () => {
                     </button>
                 </form>
 
-                {/* Footer Section Inside Card */}
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800 text-center text-sm text-gray-600 dark:text-gray-400">
                     Remember your password?{' '}
                     <Link href="/login" className="font-medium text-black dark:text-white hover:underline transition-all">

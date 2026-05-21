@@ -8,55 +8,51 @@ import { toast } from 'sonner';
 const LoginPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-
-    // Redirect target (Protected route থেকে আসলে সেখানে ফেরত পাঠাবে, নয়তো হোমপেজে)
     const redirectTo = searchParams.get('redirect') || '/';
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+    // Login Handling
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             const { data, error } = await authClient.signIn.email({
-                email: email, // required
-                password: password, // required
+                email: email,
+                password: password,
                 rememberMe: true,
-                // callbackURL: "https://example.com/callback",
             });
 
             if (!error) {
                 toast.success("Successfully Logged In!");
                 router.push(redirectTo);
-                // console.log(data);
+                router.refresh();
             } else {
                 toast.error(error.message || "Failed to log in. Please check credentials.");
             }
 
         } catch (error) {
             toast.error(error.message || "Something went wrong. Please try again.");
-            // console.error(error);
         }
     };
 
+    // 2. Google Social Login Handling
     const handleGoogleLogin = async () => {
         try {
             const { data, error } = await authClient.signIn.social({
                 provider: "google",
+                callbackURL: redirectTo,
             });
 
             if (!error) {
-                toast.success("Logged in with Google!");
-                router.push('/');
-                // console.log("Google Login Clicked", data);
+                toast.success("Redirecting to Google Login...");
             } else {
                 toast.error(error.message || "Failed to log in with Google.");
             }
         } catch (error) {
             toast.error(error.message || "Something went wrong. Please try again.");
-            // console.error(error);
         }
     };
 
@@ -98,7 +94,7 @@ const LoginPage = () => {
                             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                                 Password
                             </label>
-                            {/* Forget Password (UI only) */}
+
                             <button
                                 type="button"
                                 className="text-xs text-gray-500 hover:text-black dark:hover:text-white transition-colors"
@@ -143,7 +139,6 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                {/* --- OR Divider --- */}
                 <div className="relative flex py-5 items-center">
                     <div className="flex-grow border-t border-gray-200 dark:border-zinc-800"></div>
                     <span className="flex-shrink mx-4 text-xs text-gray-400 uppercase tracking-wider font-medium">Or continue with</span>
@@ -165,7 +160,6 @@ const LoginPage = () => {
                     <span>Sign in with Google</span>
                 </button>
 
-                {/* Link to Register */}
                 <div className="mt-8 pt-6 border-t border-gray-100 dark:border-zinc-800 text-center text-sm text-gray-600 dark:text-gray-400">
                     {"Don't"} have an account?{' '}
                     <Link href="/register" className="font-medium text-black dark:text-white hover:underline transition-all">

@@ -83,17 +83,21 @@ const AllIdeasPage = async ({ searchParams }) => {
                                 className="group relative flex flex-col justify-between bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-md p-6 shadow-sm hover:shadow-xl hover:border-gray-300 dark:hover:border-zinc-700 transition-all duration-300 hover:-translate-y-1"
                             >
 
-                                {/* 🌟 এখানে ইমেজটি যুক্ত করুন */}
-                                {/* <div className="relative h-48 w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden">
-                                    <Image
-                                        src={idea.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600"}
-                                        alt={idea.title}
-                                        fill
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                </div> */}
+                                {idea.imageUrl && (
+                                    <div className="relative h-44 w-full bg-zinc-100 dark:bg-zinc-800/50 overflow-hidden rounded-t-md border-b border-gray-100 dark:border-zinc-800/60 group">
+                                        <Image
+                                            src={idea.imageUrl}
+                                            alt={idea.title}
+                                            fill
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            loading="lazy" // 👈 স্ক্রিনে যখন স্ক্রোল করে কার্ড আসবে, তখনই শুধু ইমেজ লোড হবে (Lazy Loading)
+                                            unoptimized={false} // 👈 নেক্সট জেএস যাতে এটাকে অটো-অপটিমাইজ করতে পারে
+                                        />
+                                    </div>
+                                )}
 
-                                <div className="space-y-4">
+                                <div className="space-y-4 mt-4">
                                     <div className="flex items-center justify-between">
                                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400 border border-gray-200/50 dark:border-zinc-700/50">
                                             {idea.category}

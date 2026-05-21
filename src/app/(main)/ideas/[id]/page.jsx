@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Calendar, Users, Tag, Layers, MessageSquare, Trash2, Edit2, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
+import Image from 'next/image';
 
 const IdeaDetailsPage = () => {
     const { id } = useParams();
@@ -183,6 +184,20 @@ const IdeaDetailsPage = () => {
 
                 {/* মেইন ইনফরমেশন কার্ড */}
                 <div className="border border-gray-200 dark:border-zinc-800 rounded-md p-6 sm:p-10 space-y-8 bg-white dark:bg-zinc-900/40 shadow-sm">
+
+                    {/* 🌟 এখানে ইমেজটি যুক্ত করুন */}
+                    {idea.imageUrl && (
+                        <div className="relative h-80 w-full bg-gray-100 dark:bg-zinc-800 overflow-hidden rounded-md border-b border-gray-100 dark:border-zinc-800/50 ">
+                            <Image
+                                src={idea.imageUrl}
+                                alt={idea.title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                                priority={false} // 👈 এর মানে হলো স্ক্রিনে স্ক্রোল করে যখন কার্ড সামনে আসবে, তখনই শুধু ইমেজ লোড হবে (Lazy Loading), ফলে ওয়েবসাইট একদম রকেটের মতো ফাস্ট থাকবে!
+                            />
+                        </div>
+                    )}
 
                     {/* ক্যাটাগরি ও বাজেট ট্যাগ */}
                     <div className="flex flex-wrap items-center justify-between gap-4">

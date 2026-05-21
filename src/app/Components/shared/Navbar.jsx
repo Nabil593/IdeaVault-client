@@ -6,6 +6,7 @@ import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import { Avatar } from '@heroui/react';
 import { toast } from 'sonner';
+import NavLink from './NavLink';
 
 const Navbar = () => {
 
@@ -17,8 +18,6 @@ const Navbar = () => {
         error, //error object
         refetch //refetch the session
     } = authClient.useSession();
-
-    // console.log(session);
 
     const user = session?.user;
 
@@ -102,13 +101,13 @@ const Navbar = () => {
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                        <Link href="/" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</Link>
-                        <Link href="/ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</Link>
+                        <NavLink href="/" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Home</NavLink>
+                        <NavLink href="/ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Ideas</NavLink>
 
                         {user && (
                             <>
-                                <Link href="/my-ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Ideas</Link>
-                                <Link href="/interactions" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Interactions</Link>
+                                <NavLink href="/my-ideas" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Ideas</NavLink>
+                                <NavLink href="/interactions" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">My Interactions</NavLink>
                             </>
                         )}
 
