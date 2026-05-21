@@ -26,7 +26,6 @@ const SignUpPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Password Validation Behavior Check
         if (!validatePassword(password)) {
             toast.error("Password must be at least 6 characters long and include both uppercase and lowercase letters.");
             return;
@@ -38,21 +37,17 @@ const SignUpPage = () => {
                 email: email, // required
                 password: password, // required
                 image: photoUrl,
-                // callbackURL: "https://example.com/callback",
             });
 
             if (!error) {
                 toast.success("Registration completed successfully!");
                 router.push('/login');
-                // console.log(data)
             } else {
                 toast.error(error.message || "Registration failed. Try again.");
-                // console.error(error);
             }
 
         } catch (error) {
             toast.error(error.message || "Something went wrong. Please try again.");
-            // console.error(error);
         }
     };
 
@@ -65,14 +60,11 @@ const SignUpPage = () => {
             if (!error) {
                 toast.success("Registered with Google!");
                 router.push('/');
-                // console.log("Google Sign Up Clicked", data);
             } else {
                 toast.error(error.message || "Failed to register with Google.");
-                // console.log(error)
             }
         } catch (error) {
             toast.error(error.message || "Something went wrong. Please try again.");
-            // console.error(error);
         }
     };
 
@@ -170,7 +162,7 @@ const SignUpPage = () => {
                             </button>
                         </div>
 
-                        {/* Real-time Dynamic Guidance Check (UI feedback for validation) */}
+                        {/* Real-time Dynamic Guidance Check */}
                         <div className="mt-2 space-y-1 text-xs text-gray-400">
                             <p className={password.length >= 6 ? "text-green-600 dark:text-green-400" : ""}>✓ Minimum 6 characters</p>
                             <p className={/[A-Z]/.test(password) ? "text-green-600 dark:text-green-400" : ""}>✓ Must include uppercase letter</p>
@@ -178,7 +170,6 @@ const SignUpPage = () => {
                         </div>
                     </div>
 
-                    {/* Register Button */}
                     <button
                         type="submit"
                         className="w-full py-3 px-4 mt-4 text-sm font-medium rounded-lg bg-black text-white dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-all font-semibold"
@@ -187,7 +178,6 @@ const SignUpPage = () => {
                     </button>
                 </form>
 
-                {/* --- OR Divider --- */}
                 <div className="relative flex py-4 items-center">
                     <div className="flex-grow border-t border-gray-200 dark:border-zinc-800"></div>
                     <span className="flex-shrink mx-4 text-xs text-gray-400 uppercase tracking-wider font-medium">Or register with</span>
