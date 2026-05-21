@@ -13,7 +13,6 @@ const PlatformStats = () => {
         <section className="py-16 bg-gray-50 dark:bg-zinc-900/40 border-y border-gray-100 dark:border-zinc-800/60 font-sans transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                {/* Grid Layout */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                     {stats.map((stat) => {
                         const Icon = stat.icon;
