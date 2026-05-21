@@ -34,14 +34,12 @@ const AddIdeaPage = () => {
         e.preventDefault();
         setLoading(true);
 
-        // 🛡️ সেফটি চেক: ইউজার লগইন না থাকলে এখানেই সাবমিশন আটকে দেবে
         if (!currentUser?.email) {
             toast.error('You must be logged in to deploy a concept!');
             setLoading(false);
             return;
         }
 
-        // 🎯 পেলোড তৈরি: ফর্ম ডাটার সাথে ইউজারের ইমেইল মার্জ করা হলো
         const ideaPayload = {
             ...formData,
             userEmail: currentUser.email
@@ -76,18 +74,15 @@ const AddIdeaPage = () => {
         }
     };
 
-    // ইনপুট ফিল্ডগুলোর জন্য কমন লাইট/ডার্ক মোড সিএসএস ক্লাস
-    const inputClasses = "w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:border-gray-400 dark:focus:border-zinc-600 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none transition-all duration-300";
 
-    // লেবেলগুলোর জন্য কমন ক্লাস
+    const inputClasses = "w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 focus:border-gray-400 dark:focus:border-zinc-600 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none transition-all duration-300";
     const labelClasses = "text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-zinc-400";
 
     return (
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-white dark:bg-[#121212] px-4 py-12 font-sans transition-colors duration-300">
-            {/* মেইন ফর্ম কন্টেইনার কার্ড */}
             <div className="w-full max-w-3xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl shadow-xl p-6 sm:p-10 transition-all">
 
-                {/* হেডার সেকশন */}
+                {/* Header Section */}
                 <div className="space-y-2 border-b border-gray-100 dark:border-zinc-800 pb-6 mb-6">
                     <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                         Deploy Your New Idea
@@ -97,7 +92,7 @@ const AddIdeaPage = () => {
                     </p>
                 </div>
 
-                {/* ফর্ম এলিমেন্ট */}
+                {/* Form Section */}
                 <form onSubmit={handleSubmit} className="space-y-6">
 
                     {/* Idea Title */}
