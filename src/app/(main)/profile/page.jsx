@@ -17,7 +17,7 @@ const MyProfile = () => {
         image: ''
     });
 
-    // সেশন ডাটা লোড হলে ফর্মের স্টেট ফিলাপ করা
+
     useEffect(() => {
         if (currentUser) {
             setFormData({
@@ -52,7 +52,6 @@ const MyProfile = () => {
                     description: 'Please reload the page or re-sync session to view client state changes.'
                 });
 
-                // BetterAuth এর সেশন ফ্রন্টএন্ডে ফোর্স রিফ্রেশ করা (যদি বিল্ট-ইন মেথড থাকে)
                 authClient.reloadSession(); 
             } else {
                 toast.error('Failed to patch profile metrics.');
@@ -65,7 +64,6 @@ const MyProfile = () => {
         }
     };
 
-    // প্রটেকশন ও লোডিং গেটওয়ে
     if (isPending) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -79,7 +77,7 @@ const MyProfile = () => {
         return null;
     }
 
-    // উইজেট সিএসএস ক্লাসসমূহ
+
     const inputClasses = "w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-zinc-400 dark:focus:border-zinc-600 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none transition-all duration-300 pl-11";
     const labelClasses = "text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-semibold";
 
@@ -87,10 +85,9 @@ const MyProfile = () => {
         <div className="min-h-[calc(100vh-4rem)] bg-white dark:bg-[#121212] flex items-center justify-center px-4 py-12 font-sans transition-colors duration-300">
             <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl p-6 sm:p-10 relative overflow-hidden">
 
-                {/* টপ ডেকোরেশন লাইন */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-zinc-400 dark:via-zinc-700 to-transparent" />
 
-                {/* প্রোফাইল হেডার */}
+                {/* Header Section */}
                 <div className="flex flex-col items-center text-center space-y-4 border-b border-zinc-100 dark:border-zinc-800 pb-8 mb-8">
                     <div className="relative group">
                         <div className="w-24 h-24 rounded-full border-2 border-zinc-200 dark:border-zinc-800 overflow-hidden bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center shadow-inner transition-all duration-300 group-hover:border-zinc-400 dark:group-hover:border-zinc-600">
@@ -115,10 +112,9 @@ const MyProfile = () => {
                     </div>
                 </div>
 
-                {/* এডিট ফর্ম */}
                 <form onSubmit={handleProfileUpdate} className="space-y-6">
 
-                    {/* ইমেইল ফিল্ড (লকড - পরিবর্তনযোগ্য নয়) */}
+                    {/* Email input */}
                     <div className="flex flex-col gap-2 opacity-60 cursor-not-allowed">
                         <label className={labelClasses}>Account Identity (Immutable)</label>
                         <div className="relative">
@@ -132,7 +128,7 @@ const MyProfile = () => {
                         </div>
                     </div>
 
-                    {/* নাম পরিবর্তন ফিল্ড */}
+                    {/* Name input */}
                     <div className="flex flex-col gap-2">
                         <label className={labelClasses}>Full Name</label>
                         <div className="relative">
@@ -149,7 +145,7 @@ const MyProfile = () => {
                         </div>
                     </div>
 
-                    {/* প্রোফাইল ইমেজ ইউআরএল ফিল্ড */}
+                    {/* Image URL input */}
                     <div className="flex flex-col gap-2">
                         <label className={labelClasses}>Avatar Image URL</label>
                         <div className="relative">
@@ -165,7 +161,6 @@ const MyProfile = () => {
                         </div>
                     </div>
 
-                    {/* সাবমিট বাটন */}
                     <div className="pt-2">
                         <button
                             type="submit"
@@ -178,11 +173,11 @@ const MyProfile = () => {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                     </svg>
-                                    Saving Synchronizations...
+                                    Saving Data...
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-2">
-                                    <Save className="w-4 h-4" /> Save Profile Metrics
+                                    <Save className="w-4 h-4" /> Save Profile Data
                                 </span>
                             )}
                         </button>
