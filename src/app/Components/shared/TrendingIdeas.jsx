@@ -11,7 +11,7 @@ const TrendingIdeas = () => {
     useEffect(() => {
         const fetchTrendingIdeas = async () => {
             try {
-                const res = await fetch('http://localhost:5000/trending-ideas');
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/trending-ideas`);
                 if (res.ok) {
                     const data = await res.json();
                     setIdeas(data);

@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 
-const LoginPage = () => {
+
+const LoginPageContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirectTo = searchParams.get('redirect') || '/';
@@ -38,7 +39,7 @@ const LoginPage = () => {
         }
     };
 
-    // 2. Google Social Login Handling
+    // Google Social Login Handling
     const handleGoogleLogin = async () => {
         try {
             const { data, error } = await authClient.signIn.social({
@@ -168,6 +169,18 @@ const LoginPage = () => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const LoginPage = () => {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
+                <span className="loading loading-spinner loading-md text-gray-500"></span>
+            </div>
+        }>
+            <LoginPageContent />
+        </Suspense>
     );
 };
 

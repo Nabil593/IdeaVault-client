@@ -19,7 +19,7 @@ const InteractionsPage = () => {
             if (!currentUser?.email) return;
             try {
                 setLoading(true);
-                const res = await fetch(`http://localhost:5000/my-interactions?email=${currentUser.email}`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-interactions?email=${currentUser.email}`);
                 if (res.ok) {
                     const data = await res.json();
                     setCommentedIdeas(data);

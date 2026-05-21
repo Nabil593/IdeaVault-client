@@ -11,6 +11,8 @@ import Image from 'next/image';
 const IdeaDetailsPage = () => {
     const { id } = useParams();
     const router = useRouter();
+    const [token, setToken] = useState(null);
+
 
     const [idea, setIdea] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -35,7 +37,20 @@ const IdeaDetailsPage = () => {
     useEffect(() => {
         const fetchIdeaDetails = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/ideas/${id}`);
+                const session = await authClient.getSession();
+
+                // BetterAuth JWT প্লাগইন অনুযায়ী আসল টোকেনটি বের করা
+                const jwtToken = session?.data?.token || session?.data?.session?.token;
+                console.log(jwtToken)
+
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` })
+                    }
+                });
+
                 if (res.ok) {
                     const data = await res.json();
                     setIdea(data);
@@ -55,7 +70,7 @@ const IdeaDetailsPage = () => {
         if (id) fetchIdeaDetails();
     }, [id]);
 
-    // 2. Add new comment
+    // 2. Add new comment (Updated with JWT)
     const handleAddComment = async (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
@@ -67,10 +82,15 @@ const IdeaDetailsPage = () => {
         };
 
         try {
-            const res = await fetch(`http://localhost:5000/ideas/${id}/comments`, {
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
+            const session = await authClient.getSession();
+            const jwtToken = session?.data?.token || session?.data?.session?.token;
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}/comments`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
                 },
                 body: JSON.stringify(commentPayload)
             });
@@ -96,14 +116,21 @@ const IdeaDetailsPage = () => {
         setEditingText(comment.text);
     };
 
-    // 4. Save edited comments
+    // 4. Save edited comments (Updated with JWT)
     const handleSaveEdit = async (commentId) => {
         if (!editingText.trim()) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/ideas/${id}/comments/${commentId}`, {
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
+            const session = await authClient.getSession();
+            const jwtToken = session?.data?.token || session?.data?.session?.token;
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}/comments/${commentId}`, {
                 method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
+                },
                 body: JSON.stringify({ text: editingText })
             });
 
@@ -117,18 +144,25 @@ const IdeaDetailsPage = () => {
                 setEditingText('');
                 toast.success("Comment updated in database!");
             } else {
-                toast.error("Failed to update comment.");
+                toast.error(data.message || "Failed to update comment.");
             }
         } catch (error) {
             toast.error("Network sync failed.");
         }
     };
 
-    // 5. Delete comments
+    // 5. Delete comments (Updated with JWT)
     const handleDeleteComment = async (commentId) => {
         try {
-            const res = await fetch(`http://localhost:5000/ideas/${id}/comments/${commentId}`, {
-                method: 'DELETE'
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
+            const session = await authClient.getSession();
+            const jwtToken = session?.data?.token || session?.data?.session?.token;
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
+                }
             });
 
             const data = await res.json();
@@ -137,7 +171,7 @@ const IdeaDetailsPage = () => {
                 setComments(comments.filter(c => c._id !== commentId));
                 toast.success("Comment deleted from database.");
             } else {
-                toast.error("Failed to delete comment.");
+                toast.error(data.message || "Failed to delete comment.");
             }
         } catch (error) {
             toast.error("Network sync failed.");

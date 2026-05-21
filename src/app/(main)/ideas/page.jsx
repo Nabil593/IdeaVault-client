@@ -25,7 +25,7 @@ const AllIdeasPage = async ({ searchParams }) => {
         if (startDate) params.append('startDate', startDate);
         if (endDate) params.append('endDate', endDate);
 
-        const res = await fetch(`http://localhost:5000/ideas?${params.toString()}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas?${params.toString()}`, {
             cache: 'no-store'
         });
 
