@@ -43,7 +43,7 @@ const InteractionsPage = () => {
         }
     }, [currentUser?.email, isPending]);
 
-    // লোডিং স্টেট
+
     if (isPending || loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
@@ -56,7 +56,7 @@ const InteractionsPage = () => {
         <div className="min-h-screen bg-white dark:bg-[#121212] text-zinc-900 dark:text-zinc-100 py-12 font-sans transition-colors duration-300">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-                {/* হেডার সেকশন */}
+                {/* Header Section */}
                 <div className="border-b border-zinc-100 dark:border-zinc-800 pb-5 flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold tracking-tight">My Interactions</h1>
@@ -66,7 +66,7 @@ const InteractionsPage = () => {
                     </div>
                 </div>
 
-                {/* কন্টেন্ট লিস্ট */}
+                {/* Content list */}
                 {commentedIdeas.length === 0 ? (
                     <div className="text-center py-20 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/30 dark:bg-zinc-900/10">
                         <MessageSquare className="w-8 h-8 text-zinc-300 dark:text-zinc-700 mx-auto mb-3" />
@@ -81,7 +81,6 @@ const InteractionsPage = () => {
 
                         <div className="grid grid-cols-1 gap-4">
                             {commentedIdeas.map((idea) => {
-                                // শুধুমাত্র এই ইউজারের করা শেষ কমেন্টটি খুঁজে বের করা ফিল্টার করে দেখানোর জন্য (Optional UX enhancement)
                                 const myLastComment = idea.comments
                                     ?.filter(c => c.userEmail === currentUser.email)
                                     .pop();
@@ -106,15 +105,14 @@ const InteractionsPage = () => {
                                                 {idea.title}
                                             </h3>
 
-                                            {/* ইউজারের নিজের করা কমেন্ট প্রিভিউ বক্স */}
+                                            {/* Comment preview box */}
                                             {myLastComment && (
                                                 <div className="mt-2 text-xs border-l-2 border-zinc-300 dark:border-zinc-700 pl-3 py-1 text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-900/50 rounded-r-md italic">
-                                                    " {myLastComment.text} "
+                                                    {myLastComment.text} 
                                                 </div>
                                             )}
                                         </div>
 
-                                        {/* আইডিয়া ডিটেইলস পেজে যাওয়ার বাটন */}
                                         <button
                                             onClick={() => router.push(`/ideas/${idea._id}`)}
                                             className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all self-start md:self-center"
