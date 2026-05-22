@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Users, Tag, Layers, MessageSquare, Trash2, Edit2, X, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, Users, Tag, Layers, MessageSquare, Trash2, Edit2, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import Image from 'next/image';
@@ -36,11 +36,10 @@ const IdeaDetailsPage = () => {
     // 1. Loading idea & comment data from backend
     useEffect(() => {
         const fetchIdeaDetails = async () => {
-            if (!id) return;
             try {
-                setLoading(true)
                 const session = await authClient.getSession();
 
+                // BetterAuth JWT প্লাগইন অনুযায়ী আসল টোকেনটি বের করা
                 const jwtToken = session?.data?.token || session?.data?.session?.token;
                 console.log(jwtToken)
 
@@ -68,9 +67,7 @@ const IdeaDetailsPage = () => {
             }
         };
 
-        if (id && !authLoading) {
-            fetchIdeaDetails();
-        }
+        if (id) fetchIdeaDetails();
     }, [id]);
 
     // 2. Add new comment (Updated with JWT)
@@ -85,6 +82,7 @@ const IdeaDetailsPage = () => {
         };
 
         try {
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
@@ -123,6 +121,7 @@ const IdeaDetailsPage = () => {
         if (!editingText.trim()) return;
 
         try {
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
@@ -155,13 +154,14 @@ const IdeaDetailsPage = () => {
     // 5. Delete comments (Updated with JWT)
     const handleDeleteComment = async (commentId) => {
         try {
+            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
-                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` })
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
                 }
             });
 
@@ -181,7 +181,7 @@ const IdeaDetailsPage = () => {
 
 
 
-    if (loading || authLoading) {
+    if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121212]">
                 <span className="loading loading-spinner loading-md text-gray-400"></span>
