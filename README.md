@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 IdeaVault – Startup Idea Sharing Platform
 
-## Getting Started
+IdeaVault is a premium, high-performance web application engineered for entrepreneurs and innovators to crowdsource, validate, and refine startup concepts. Moving away from typical scheduling or booking engines, this platform centers entirely on community engagement, offering instant idea feedback, robust interaction metrics, and real-time concept validation.
 
-First, run the development server:
+**Live Site URL:** [Deploying Link Goes Here](https://idea-vault-client-ten.vercel.app/)  
+**Server-Side Repository:** [Link to Server Repo](https://idea-vault-server-gamma.vercel.app/)
 
+---
+
+## ✨ Key Features
+
+* **Advanced Next.js App Router Architecture:** Utilizes optimized client and server-side rendering pipelines ensuring that page updates occur dynamically with custom, route-based document titles and zero layout shifts.
+* **Streamlined Discovery with Real-Time Search & Filters:** Features a robust search engine (case-insensitive title matching) coupled with fast category and structural filtration on a unified 3-column responsive catalog grid.
+* **Secure Session Architecture via BetterAuth:** Completely secured with BetterAuth incorporating both traditional Email/Password credentials (with uppercase, lowercase, and minimum 6-character validation rules) and unified Google Single Sign-On (SSO).
+* **Granular Session & Private Route Persistence:** Implements rigid JSON Web Token (JWT) authorization guardrails that fully persist across deep refreshes, preventing authenticated users from experiencing jarring login page redirects.
+* **Polished Interaction & Mutation Workflows:** Leverages premium custom modals and interactive layers for complete CRUD operations (create, read, update, delete) on ideas and comments, paired with clean contextual timestamps.
+
+---
+
+## 🛠️ Technology Stack & Architecture
+
+### Client-Side (Frontend)
+* **Framework:** Next.js (App Router)
+* **Authentication:** BetterAuth (Session persistence, Google OAuth, & Secure Cookies)
+* **Styling & Layout:** Tailwind CSS & HeroUI (Consistent component spacing, padding, and layout continuity)
+* **UI Component Library:** shadcn/ui (Accessible, custom-built modular primitives)
+* **Feedback Systems:** Sonner Toast (Replaces all standard browser alert popups for full application mutations)
+
+### Server-Side (Backend & Database)
+* **Runtime Environment:** Node.js
+* **Backend Framework:** Express.js (RESTful API architecture handling JWT verification middleware)
+* **Database Management:** MongoDB (Document-driven architecture leveraging `$limit`, `$regex`, and aggregation pipelines)
+
+---
+
+## 📱 Core Layout & App Routes
+
+### Public Access
+* **`/` (Home):** Dynamic landing layout including a minimum 3-slide innovation hero banner, structural Call-To-Actions (CTAs), and a top trending container limited to the highest-performing 6 startup ideas.
+* **`/ideas`:** Clean 3-column responsive explorer layout complete with title search bars, category selectors, and custom-proportioned view cards.
+* **`/login` & `/register`:** Unified authentication access gates featuring responsive validation feedback.
+* **`404 Not Found`:** Custom, brand-aligned visual page for handling broken or unmatched application routes.
+
+### Private/Protected Access (Requires Authentication)
+* **`/ideas/[id]` (Details):** Deep informational lookup displaying complete problem statements, proposed solutions, estimated budgets, and a custom multi-author commenting stream.
+* **`/add-idea`:** Structured validation form for pitching title layouts, deep analytical content, target audiences, and relevant tag groups.
+* **`/my-ideas`:** Personalized user dashboard housing fast, modal-driven editing panels and distinct action deletion confirmations.
+* **`/my-interactions`:** Dedicated summary screen chronicling user history, including tracked commenting metrics across the platform.
+
+---
+
+## 📦 Local Installation & Setup
+
+Follow these steps to spin up the development environment locally:
+
+1. **Clone the Repository:**
+   
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   git clone [https://github.com/your-username/ideavault-client.git](https://github.com/your-username/ideavault-client.git)
+   cd ideavault-client
