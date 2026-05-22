@@ -1,13 +1,15 @@
+import { Spinner } from '@heroui/react';
 import React from 'react';
 
 const Loading = () => {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-black transition-colors duration-300">
-            <div className="flex items-center space-x-2">
-                <span className="sr-only">Loading...</span>
-                <div className="h-3 w-3 bg-indigo-600 dark:bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                <div className="h-3 w-3 bg-indigo-600 dark:bg-indigo-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                <div className="h-3 w-3 bg-indigo-600 dark:bg-indigo-400 rounded-full animate-bounce"></div>
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-zinc-950 transition-colors duration-300">
+            <div className="flex flex-col items-center gap-3">
+                <Spinner size="xl" className="text-indigo-600 dark:text-indigo-400" />
+
+                <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium tracking-wide animate-pulse">
+                    Loading...
+                </span>
             </div>
         </div>
     );
