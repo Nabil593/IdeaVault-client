@@ -6,6 +6,11 @@ import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 
 
+export const metadata = {
+  title: "Idea Vault - Login",
+};
+
+
 const LoginPageContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();

@@ -4,8 +4,9 @@ import { ArrowUpRight, Users, DollarSign, Search, Calendar, SlidersHorizontal } 
 import Image from 'next/image';
 import { FilterPanel } from '@/app/Components/shared/FilterPanel';
 
-
-
+export const metadata = {
+  title: "Idea Vault - Ideas",
+};
 
 const AllIdeasPage = async ({ searchParams }) => {
 

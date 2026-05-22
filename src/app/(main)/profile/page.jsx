@@ -6,6 +6,10 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { User, Mail, ShieldAlert, Save, Camera } from 'lucide-react';
 
+export const metadata = {
+  title: "Idea Vault - profile",
+};
+
 const MyProfile = () => {
     const router = useRouter();
     const { data: session, isPending } = authClient.useSession();

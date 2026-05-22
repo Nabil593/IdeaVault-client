@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useSession } from "@/lib/auth-client";
 
+export const metadata = {
+  title: "Idea Vault - add-idea",
+};
+
 const AddIdeaPage = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
