@@ -37,25 +37,21 @@ const MyProfile = () => {
         setLoading(true);
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/update-profile`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: currentUser?.email,
-                    name: formData.name,
-                    image: formData.image
-                })
+            const { data, error } = await authClient.updateUser({
+                name: formData.name,
+                image: formData.image,
             });
 
-            if (res.ok) {
-                toast.success('Profile core synchronized!', {
-                    description: 'Please reload the page or re-sync session to view client state changes.'
-                });
-
-                authClient.reloadSession(); 
-            } else {
-                toast.error('Failed to patch profile metrics.');
+            if (error) {
+                toast.error(error.message || 'Failed to patch profile metrics.');
+                return;
             }
+
+            toast.success('Profile core synchronized!', {
+                description: 'Your profile details have been updated successfully.'
+            });
+
+            await authClient.reloadSession();
         } catch (error) {
             console.error("Profile Submit Error:", error);
             toast.error('Network failure during profile synchronization.');
