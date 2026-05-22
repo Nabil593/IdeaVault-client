@@ -49,12 +49,9 @@ IdeaVault is a premium, high-performance web application engineered for entrepre
 
 ---
 
-## 📦 Local Installation & Setup
+## 🤝 Contact & Support
+If you have any questions or want to discuss this project, feel free to reach out:
 
-Follow these steps to spin up the development environment locally:
-
-1. **Clone the Repository:**
-   
-```bash
-   git clone [https://github.com/your-username/ideavault-client.git](https://github.com/your-username/ideavault-client.git)
-   cd ideavault-client
+*   **Developer:** Shariea Reza Nabil
+*   **LinkedIn:** [https://www.linkedin.com/in/shariea-reza-nabil/]
+*   **Email:** [nabilreza183@gmail.com]
