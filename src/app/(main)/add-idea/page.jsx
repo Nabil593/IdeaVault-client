@@ -48,7 +48,9 @@ const AddIdeaPage = () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                 },
                 body: JSON.stringify(ideaPayload)
             });
 

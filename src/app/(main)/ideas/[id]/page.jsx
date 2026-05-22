@@ -40,7 +40,6 @@ const IdeaDetailsPage = () => {
             try {
                 const session = await authClient.getSession();
 
-                // BetterAuth JWT প্লাগইন অনুযায়ী আসল টোকেনটি বের করা
                 const jwtToken = session?.data?.token || session?.data?.session?.token;
                 console.log(jwtToken)
 
