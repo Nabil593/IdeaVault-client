@@ -82,7 +82,6 @@ const IdeaDetailsPage = () => {
         };
 
         try {
-            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
@@ -121,7 +120,6 @@ const IdeaDetailsPage = () => {
         if (!editingText.trim()) return;
 
         try {
-            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
@@ -129,7 +127,7 @@ const IdeaDetailsPage = () => {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` })
                 },
                 body: JSON.stringify({ text: editingText })
             });
@@ -154,14 +152,13 @@ const IdeaDetailsPage = () => {
     // 5. Delete comments (Updated with JWT)
     const handleDeleteComment = async (commentId) => {
         try {
-            // BetterAuth থেকে সেশন ও টোকেন রিট্রিভ করা
             const session = await authClient.getSession();
             const jwtToken = session?.data?.token || session?.data?.session?.token;
 
             const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
-                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` }) // টোকেন পাঠানো হলো
+                    ...(jwtToken && { "Authorization": `Bearer ${jwtToken}` })
                 }
             });
 
