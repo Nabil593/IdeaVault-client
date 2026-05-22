@@ -6,9 +6,6 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 
-export const metadata = {
-  title: "Idea Vault - my-ideas",
-};
 
 const MyIdeasPage = () => {
     const router = useRouter();

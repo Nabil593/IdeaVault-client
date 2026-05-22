@@ -8,24 +8,6 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import Image from 'next/image';
 
-export const generateMetadata = async ({ params }) => {
-    const { id } = params;
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/ideas/${id}`, {
-            next: { revalidate: 60 }
-        });
-
-        if (!res.ok) return { title: "Concept Not Found | Vault" };
-
-        const idea = await res.json();
-        return {
-            title: `${idea.title || "Concept Details"} | Vault`,
-            description: idea.shortDesc || "Explore this platform architecture plan.",
-        };
-    } catch (error) {
-        return { title: "Error Loading Concept | Vault" };
-    }
-};
 
 const IdeaDetailsPage = () => {
     const { id } = useParams();

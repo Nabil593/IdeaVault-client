@@ -12,8 +12,11 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Idea Vault",
-  description: "Startup Idea Sharing Platform",
+  title: {
+    default: "Idea Vault",
+    template: "Idea Vault - %s",
+  },
+  description: "Your ultimate full-stack idea blueprint vault.",
 };
 
 export default function RootLayout({ children }) {

@@ -3,9 +3,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export const metadata = {
-  title: "Idea Vault - Forget",
-};
 
 const ForgetPage = () => {
     const router = useRouter();

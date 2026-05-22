@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 
-export const metadata = {
-  title: "Idea Vault - Register",
-};
-
 
 const SignUpPage = () => {
     const router = useRouter();

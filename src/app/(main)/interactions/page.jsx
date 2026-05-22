@@ -6,9 +6,6 @@ import { useRouter } from 'next/navigation';
 import { MessageSquare, ArrowUpRight, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 
-export const metadata = {
-  title: "Idea Vault - interaction",
-};
 
 const InteractionsPage = () => {
     const router = useRouter();
