@@ -2,8 +2,7 @@
 
 IdeaVault is a premium, high-performance web application engineered for entrepreneurs and innovators to crowdsource, validate, and refine startup concepts. Moving away from typical scheduling or booking engines, this platform centers entirely on community engagement, offering instant idea feedback, robust interaction metrics, and real-time concept validation.
 
-**Live Site URL:** [Deploying Link Goes Here](https://idea-vault-client-ten.vercel.app/)  
-**Server-Side Repository:** [Link to Server Repo](https://idea-vault-server-gamma.vercel.app/)
+**Live Site URL:** [Deploying Link Goes Here](https://idea-vault-client-ten.vercel.app/)
 
 ---
 
